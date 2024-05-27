@@ -1,0 +1,5 @@
+打开要截图的网页 → 快捷键F12 → 快捷键Ctrl + Shift + P → 输入“Full” → 回车键 → 网页截长图 → 自动下载保留
+
+
+在线截网页长图
+http://www.kjson.com/tools/screenshot
