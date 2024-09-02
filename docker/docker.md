@@ -743,7 +743,7 @@ docker rmi -f 镜像名1:TAG 镜像名2:TAG/镜像ID1 镜像ID2
 docker rmi -f $(docker images -qa)
 ```
 
-# 删除none镜像
+### 删除none镜像
 
 ```sh
 #查 询所有的none镜像
@@ -754,6 +754,16 @@ docker images  | grep none | awk '{print $3}'
 
 # 删除所有的none镜像
 docker images  | grep none | awk '{print $3}' | xargs docker rmi
+```
+
+### 保存加载镜像
+
+```sh
+# 保存镜像到本地文件
+docker save -o ubuntu-20.04.tar ubuntu:20.04
+
+# 从本地文件加载镜像
+docker load -i ubuntu-20.04.tar
 ```
 
 
@@ -967,6 +977,9 @@ docker rm -f 容器ID或容器名
 ```sh
 docker rm 容器ID
 
+# 删除所有已停止容器
+docker container prune
+
 # 一次性删除多个容器实例
 docker rm -f $(docker ps -a -q)
 
@@ -974,6 +987,29 @@ docker ps -a -q | xargs docker rm
 
 # 删除所有ubuntu容器 
 docker rm -f $(docker ps -a | grep ubuntu | awk '{print $1}')
+```
+
+### 更新容器资源限制
+
+```sh
+# 只能更新运行中的容器（状态为 "running"），不能更新已停止的容器
+docker update CONTAINER --memory 500M --memory-swap 1G
+
+# memory: 容器可用的内存上限。
+# memoryswap: 容器可用的总内存，包括交换空间。如果没有显式设置，memoryswap 默认为 memory 的两倍。
+# 修改容器 `CONTAINER` 的内存限制为 500M。
+
+
+# --blkio-weight：更新容器的块 I/O 权重。
+# --cpu-period：更新容器的 CPU 周期。
+# --cpu-quota：更新容器的 CPU 配额。
+# --cpuset-cpus：更新容器的 CPU affinity。
+# --kernel-memory：更新容器的内核内存限制。
+# --memory：更新容器的内存限制。
+# --memory-reservation：更新容器的内存保留量。
+# --memory-swap：更新容器的交换空间限制。
+# --restart：更新容器的重启策略。
+# --ulimit：更新容器的 ulimit 设置。
 ```
 
 
@@ -6822,5 +6858,16 @@ edit
     always # 容器退出时总是重启
 --rm=false # 指定容器停止后自动删除容器(不支持以docker run -d启动的容器)
 --sig-proxy=true # 设置由代理接受并处理信号，但是SIGCHLD、SIGSTOP和SIGKILL不能被代理
+```
+
+
+
+```sh
+# 容器启动后，取消/设置跟随docker启动
+docker update --restart=no <容器名称或ID>
+docker update --restart=always <容器名称或ID>
+
+# 修改容器名称
+docker rename old_name new_name
 ```
 
